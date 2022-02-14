@@ -1,3 +1,4 @@
+Releasing version 1.0.0
 Read me created from changereadme branch
 
 insert
