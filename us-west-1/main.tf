@@ -13,12 +13,12 @@ terraform {
   }
 }
 provider "aws" {
-  region = "us-west-2"
+  region = "us-east-1"
   profile = "default"
 }
 data "aws_vpc" "selected" {
   state = "available"
   tags = {
-      Name = "vpc-weekend"
+      Name = "training-vpc"
   }
 }

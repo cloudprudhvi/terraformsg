@@ -2,21 +2,23 @@ locals {
   env = lower(var.env)
 }
 data "aws_vpc" "selected" {
+  count = "${var.vpc_id == "" ? 1 : 0}"
   state = "available"
   tags = {
-      Name = "DevOps-vpc"
+      env = "prod",
+      managedby = "terraform"
   }
 }
-resource "aws_security_group" "default1" {
-  name_prefix = "${local.env}-uptime"
-  vpc_id = data.aws_vpc.selected.id
-  egress {
-      from_port = 0
-      to_port = 0
-      protocol = "-1"
-      cidr_blocks = ["0.0.0.0/0"]
-  }
-}
+# resource "aws_security_group" "default1" {
+#   name_prefix = "${local.env}-uptime"
+#   vpc_id = data.aws_vpc.selected.id
+#   egress {
+#       from_port = 0
+#       to_port = 0
+#       protocol = "-1"
+#       cidr_blocks = ["0.0.0.0/0"]
+#   }
+# }
 
 # resource "aws_ecs_cluster" "default" {
 #   name = "${local.env}-uptime-agents"
@@ -37,7 +39,7 @@ resource "aws_security_group" "default1" {
 # }
 resource "aws_security_group" "default" {
   name_prefix = "${local.env}-uptime"
-  vpc_id = data.aws_vpc.selected.id
+  vpc_id = "${var.vpc_id == "" ? data.aws_vpc.selected[0].id : var.vpc_id}"
   egress {
       from_port = 0
       to_port = 0
